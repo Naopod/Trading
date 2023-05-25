@@ -24,15 +24,12 @@ def find_signal(close, ma_10, ma_20, ma_100, rsi_14, ma_rsi_14, fdi):
         else:
             return None
 
-def optimize(SYMBOL, TIMEFRAME, YEAR_FIRST, YEAR_LAST, MONTH_FIRST, MONTH_LAST, DAY_FIRST, DAY_LAST, HOUR_FIRST,
-             HOUR_LAST):
+def optimize(SYMBOL, TIMEFRAME):
     
-    bars = mt5.copy_rates_range(SYMBOL, TIMEFRAME, datetime(YEAR_FIRST, MONTH_FIRST, DAY_FIRST, HOUR_FIRST+2), 
-                                        datetime(YEAR_LAST, MONTH_LAST, DAY_LAST, HOUR_LAST+2))
+    bars = mt5.copy_rates_from_pos(SYMBOL, TIMEFRAME,0 , 50)
 
     df_m5 = pd.DataFrame(bars)
-
-    print(type(df_m5))
+    df_m5['time'] = pd.to_datetime(df_m5['time'], unit='s')
 
     ## Different Moving Averages on the M5 : 21, 50, 100
      
