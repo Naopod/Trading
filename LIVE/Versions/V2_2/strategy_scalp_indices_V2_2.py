@@ -205,6 +205,9 @@ if __name__ == '__main__':
         TP_SD_BUY = 2
         SL_SD_SELL = 3
         TP_SD_SELL = 2
+        
+        random_alea = []
+        date = []
 
         # calculating account exposure
         exposure = get_exposure(SYMBOL)
@@ -225,16 +228,24 @@ if __name__ == '__main__':
             if rsi_14 > ma_rsi_14 and fdi < 1.5:
                 direction = 'buy'
                 close_positions('sell')
+                
+                if num_positions == 0: #and check_allowed_trading_hours()
+                        tick = mt5.symbol_info(SYMBOL)
+                        order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
+                        print(order_result)
+                        
             elif rsi_14 > ma_rsi_14 and fdi >=1.5 :
                 alea = rd.random()
                 if alea > 0.5 :
                     direction = 'buy'
                     close_positions('sell')
 
-                if num_positions == 0: #and check_allowed_trading_hours()
-                    tick = mt5.symbol_info(SYMBOL)
-                    order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
-                    print(order_result)
+                    if num_positions == 0: #and check_allowed_trading_hours()
+                        tick = mt5.symbol_info(SYMBOL)
+                        order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
+                        print(order_result)
+                        random_alea = random_alea.append(alea)
+                        date = date.append(datetime.now())
 
         elif close < ma_21 and close < ma_50 and close < ma_100:
             if rsi_14 < ma_rsi_14:
@@ -303,6 +314,8 @@ if __name__ == '__main__':
         print('Best value for tp_buy: ', TP_SD_BUY)
         print('Best value for sl_sell: ', SL_SD_SELL)
         print('Best value for tp_sell: ', TP_SD_SELL)
+        print(random_alea)
+        print(date)
         print('-------\n')
 
         # update every 1 second
