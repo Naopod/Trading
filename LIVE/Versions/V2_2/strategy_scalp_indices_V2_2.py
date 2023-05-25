@@ -9,7 +9,7 @@ from datetime import datetime
 from time import sleep
 from itertools import product
 from statistics import mode
-from opt_function import optimize
+from opt_function_V2_2 import optimize
 from math import sqrt
 
 ## Get Moving Averages, RSI, Close and SD
@@ -262,23 +262,10 @@ if __name__ == '__main__':
         deal_history = mt5.history_deals_get(datetime(today_date.year, today_date.month, today_date.day), datetime.now())
 
         if len(deal_history) in range(5, 100, 5):
-            date_first = deal_history[-5][1]
-            date_first_formated = pd.to_datetime(date_first, unit='s')
-            hour_first = date_first_formated.hour
-            day_first = date_first_formated.day
-            month_first = date_first_formated.month
-            year_first = date_first_formated.year
-            date_last = deal_history[-1][1]
-            date_last_formated = pd.to_datetime(date_last, unit='s')
-            hour_last = date_last_formated.hour
-            day_last = date_last_formated.day
-            month_last = date_last_formated.month
-            year_last = date_last_formated.year
 
-            ## Optimize past five trades
+            ## Optimize over the past 50 ticks
 
-            best_sl_buy, best_tp_buy, best_sl_sell, best_tp_sell, best_profit = optimize(SYMBOL, TIMEFRAME, year_first, year_last, 
-                                                                month_first, month_last, day_first, day_last, hour_first, hour_last)
+            best_sl_buy, best_tp_buy, best_sl_sell, best_tp_sell, best_profit = optimize(SYMBOL, TIMEFRAME)
 
             ## Assign best values to sl and tp
 
