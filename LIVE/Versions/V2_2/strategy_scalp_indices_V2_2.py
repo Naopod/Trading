@@ -163,7 +163,7 @@ def close_positions(order_type):
             print('order_result: ', order_result)
 
 def check_allowed_trading_hours():
-    if 9 < datetime.now().hour < 17:
+    if 15 < datetime.now().hour < 22:
         return True
     else:
         return False
