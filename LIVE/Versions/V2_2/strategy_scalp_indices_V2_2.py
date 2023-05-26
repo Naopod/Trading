@@ -248,7 +248,7 @@ if __name__ == '__main__':
                         date = date.append(datetime.now())
 
         elif close < ma_21 and close < ma_50 and close < ma_100:
-            if rsi_14 < ma_rsi_14:
+            if rsi_14 < ma_rsi_14 and fdi < 1.5:
                 close_positions('buy')
                 direction = 'sell'
                 
@@ -256,6 +256,19 @@ if __name__ == '__main__':
                     tick = mt5.symbol_info(SYMBOL)
                     order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
                     print(order_result)
+            
+            elif rsi_14 > ma_rsi_14 and fdi >=1.5 :
+                alea = rd.random()
+                if alea > 0.5 :
+                    direction = 'sell'
+                    close_positions('buy')
+                
+                if num_positions == 0: #and check_allowed_trading_hours()
+                    tick = mt5.symbol_info(SYMBOL)
+                    order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
+                    print(order_result)
+                    random_alea = random_alea.append(alea)
+                    date = date.append(datetime.now())
 
         today_date = datetime.today()
 
