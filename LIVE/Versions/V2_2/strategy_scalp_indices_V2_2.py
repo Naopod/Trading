@@ -263,12 +263,12 @@ if __name__ == '__main__':
                     direction = 'sell'
                     close_positions('buy')
                 
-                if num_positions == 0: #and check_allowed_trading_hours()
-                    tick = mt5.symbol_info(SYMBOL)
-                    order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
-                    print(order_result)
-                    random_alea = random_alea.append(alea)
-                    date = date.append(datetime.now())
+                    if num_positions == 0: #and check_allowed_trading_hours()
+                        tick = mt5.symbol_info(SYMBOL)
+                        order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
+                        print(order_result)
+                        random_alea = random_alea.append(alea)
+                        date = date.append(datetime.now())
 
         today_date = datetime.today()
 
