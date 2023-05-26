@@ -59,16 +59,33 @@ def optimize(SYMBOL, TIMEFRAME):
 
     df_m5['ma_rsi_14'] = df_m5['rsi_14'].rolling(10).mean()
 
+    ## FDI
+
+    length = 0
+    df_m5['pdiff'] = 0  # Initialize 'pdiff' column
+    df_m5['fdi'] = 0  # Initialize 'fdi' column
+
+    for index, row in df_m5.iterrows():
+        if row['high'] - row['low'] > 0:
+            diff = (row['close'] - df_m5['low'].rolling(30).min().iloc[index]) / (df_m5['high'].rolling(30).max().iloc[index] - df_m5['low'].rolling(30).min().iloc[index])
+            diff = np.nan_to_num(diff, nan=0, posinf=0, neginf=0)  # Replace NaN and infinite values with 0
+            if diff == 0:  # Check if diff at the current index is equal to 0
+                length = 0
+            else:
+                length += sqrt((diff - row['pdiff']) ** 2 + 1 / (len(df_m5) ** 2))
+                df_m5.at[index, 'pdiff'] = diff
+        if length > 0:
+            df_m5.at[index, 'fdi'] = 1 + np.log(2 * length) / np.log(2 * len(df_m5))
+        else:
+            df_m5.at[index, 'fdi'] = 0
+
     ## Drop missing values
 
     df_m5.dropna(inplace = True)
 
     ## Find signal
                     
-    df_m5['signal'] = np.vectorize(find_signal)(df_m5['close'], df_m5['ma_21'], df_m5['ma_50'], df_m5['ma_100'], df_m5['rsi_14'], df_m5['ma_rsi_14'])
-
-    buy_signal = df_m5[df_m5['signal']=='buy'].copy()
-    sell_signal = df_m5[df_m5['signal']=='sell'].copy()
+    df_m5['signal'] = np.vectorize(find_signal)(df_m5['close'], df_m5['ma_21'], df_m5['ma_50'], df_m5['ma_100'], df_m5['rsi_14'], df_m5['ma_rsi_14'], df_m5['fdi'])
 
     ## Opti
 
@@ -174,8 +191,6 @@ def optimize(SYMBOL, TIMEFRAME):
         pnls_test.append(final_profit)
         combs_used.append(comb)
 
-        print(comb, ':', final_profit)
-
     df_pnls_test = pd.DataFrame(pnls_test)
     df_combs_used = pd.DataFrame(combs_used)
 
@@ -198,5 +213,4 @@ def optimize(SYMBOL, TIMEFRAME):
     best_profit = best_sl_tp['final_profit'].unique()
 
     return best_sl_buy, best_tp_buy, best_sl_sell, best_tp_sell, best_profit
-
 
