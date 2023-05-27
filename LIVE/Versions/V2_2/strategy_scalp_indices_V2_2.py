@@ -320,3 +320,7 @@ if __name__ == '__main__':
 
         # update every 1 second
         time.sleep(1)
+
+if not __name__ == '__main__': ## Close all positions when closing it
+    close_positions('all')
+
