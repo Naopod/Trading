@@ -6,6 +6,7 @@ import random as rd
 from itertools import product
 from statistics import mode
 from datetime import datetime
+from math import sqrt
 
 
 def find_signal(close, ma_10, ma_20, ma_100, rsi_14, ma_rsi_14, fdi):
@@ -26,7 +27,7 @@ def find_signal(close, ma_10, ma_20, ma_100, rsi_14, ma_rsi_14, fdi):
 
 def optimize(SYMBOL, TIMEFRAME):
     
-    bars = mt5.copy_rates_from_pos(SYMBOL, TIMEFRAME,0 , 50)
+    bars = mt5.copy_rates_from_pos(SYMBOL, TIMEFRAME,0 , 100)
 
     df_m5 = pd.DataFrame(bars)
     df_m5['time'] = pd.to_datetime(df_m5['time'], unit='s')
@@ -35,7 +36,7 @@ def optimize(SYMBOL, TIMEFRAME):
      
     df_m5['ma_21'] = df_m5['close'].rolling(21).mean()
     df_m5['ma_50'] = df_m5['close'].rolling(50).mean()
-    df_m5['ma_100'] = df_m5['close'].rolling(100).mean()
+    df_m5['ma_100'] = df_m5['close'].mean()
 
     ## Previous Moving Average 100
 
@@ -213,4 +214,5 @@ def optimize(SYMBOL, TIMEFRAME):
     best_profit = best_sl_tp['final_profit'].unique()
 
     return best_sl_buy, best_tp_buy, best_sl_sell, best_tp_sell, best_profit
+
 
