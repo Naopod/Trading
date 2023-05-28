@@ -1,0 +1,5 @@
+# Trading-Repository
+
+Trading bot 
+
+
