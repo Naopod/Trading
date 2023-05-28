@@ -22,7 +22,7 @@ directory = "<name of the directory from the root to the the file>"
 file = "\<name of file>.txt"
 """
 
-auto = 0
+auto = 1
 directory = "C:\Documents\Finance"
 file = "\connector.txt"
 
@@ -80,10 +80,10 @@ def get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD):
     length = 0
     pdiff = 0
     
-    for period in range(1,RSI_PERIOD) :
+    for period in range(RSI_PERIOD) :
         if (highest-lowest)>0:
             diff = (close[period] - lowest)/(highest - lowest)
-            if period > 1 :
+            if period > 0 :
                 length += sqrt((diff - pdiff) ** 2 + 1/(RSI_PERIOD ** 2))
             pdiff = diff
     
@@ -265,7 +265,7 @@ if __name__ == '__main__':
                         order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
                         print(order_result)
                         
-            elif rsi_14 > ma_rsi_14 and fdi >=1.5 :
+            elif rsi_14 > ma_rsi_14 and fdi >= 1.5 :
                 alea = rd.random()
                 if alea > 0.5 :
                     direction = 'buy'
