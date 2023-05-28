@@ -1,5 +1,5 @@
 # Trading-Repository
 
-Trading bot 
+Trading bot with MA, RSI, MA RSI and FDI
 
 
