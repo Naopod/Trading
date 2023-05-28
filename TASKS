@@ -1,0 +1,21 @@
+Remaining tasks to do :
+
+1 - ML model for news analysis
+  1.1 - Make model (done)
+  1.2 - Get access to Bloomberg terminal 
+  
+2 - ML model for market analysis
+  2.1 - Finish formation on ML
+  2.2 - Design model
+  2.3 - Implement model
+  
+3 - ML model for classification of time periods
+  3.1 - Finish formation on ML
+  3.2 - Design model
+  3.3 - Implement model
+  
+4 - Interface for code
+  4.1 - Design interface
+  4.2 - Find appropriate package
+  4.3 - Train on package 
+  4.4 - Implement interface
