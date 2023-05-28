@@ -12,6 +12,20 @@ from statistics import mode
 from opt_function_V2_2 import optimize
 from math import sqrt
 
+## Choose the method for connection to MT5
+"""
+If auto has value 1 then it automatically connect you to the last used account.
+Otherwise, it extracts the data contained in a file .txt located in <directory> with the following format :
+    <login>;<password>;<server>
+    
+directory = "<name of the directory from the root to the the file>"
+file = "\<name of file>.txt"
+"""
+
+auto = 0
+directory = "C:\Documents\Finance"
+file = "\connector.txt"
+
 ## Get Moving Averages, RSI, Close and SD
 
 def get_close_sd(SYMBOL, TIMEFRAME, RSI_PERIOD):
@@ -189,14 +203,31 @@ if __name__ == '__main__':
     TIMEFRAME = mt5.TIMEFRAME_M5
     LONG_MA_PERIOD = 100
     RSI_PERIOD = 14
-
+    
     initialized = mt5.initialize()
-
+    
     if initialized:
-        print('Connected to MetaTrader5')
-        print('Login: ', mt5.account_info().login)
-        print('Server: ', mt5.account_info().server)
+    
+        if auto == 1 :
 
+            print('Connected to MetaTrader5')
+            print('Login: ', mt5.account_info().login)
+            print('Server: ', mt5.account_info().server)
+            
+        else :
+            
+            connector = pd.read_csv(directory+file, delimiter=";", header = None)
+        
+            login = int(connector[0][0])
+            password = connector[1][0]
+            server = connector[2][0]
+        
+            mt5.login(login, password, server)
+            
+            print('Connected to MetaTrader5')
+            print('Login: ', login)
+            print('Server: ', server)
+        
     while True:
 
         ## Initial values for sl, tp
@@ -257,7 +288,7 @@ if __name__ == '__main__':
                     order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
                     print(order_result)
             
-            elif rsi_14 > ma_rsi_14 and fdi >=1.5 :
+            elif rsi_14 > ma_rsi_14 and fdi >= 1.5 :
                 alea = rd.random()
                 if alea > 0.5 :
                     direction = 'sell'
