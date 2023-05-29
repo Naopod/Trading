@@ -251,7 +251,7 @@ if __name__ == '__main__':
         ma_21, ma_50, ma_100 = get_ma(SYMBOL, TIMEFRAME, LONG_MA_PERIOD)
         rsi_14, ma_rsi_14 = get_rsi(SYMBOL, TIMEFRAME, LONG_MA_PERIOD)
         close, sd = get_close_sd(SYMBOL, TIMEFRAME, RSI_PERIOD)
-        fdi = 1.505#get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD)
+        fdi = get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD)
         alea = 0
 
         direction = 'flat'
