@@ -15,7 +15,6 @@ from statistics import mode
 from opt_function_V3 import optimize
 from math import sqrt
 
-
 """
 If auto has value 1 then it automatically connect you to the last used account.
 Otherwise, it extracts the data contained in a file .txt located in <directory> with the following format :
@@ -28,6 +27,16 @@ file = "\<name of file>.txt"
 auto = 1
 directory = "C:\Documents\Finance"
 file = "\connector.txt"
+
+## Choose whether to check hours
+"""
+If check_hours has value True then it will enable the function 'check_allowed_trading_hours()'.
+Otherwise, it will activate auto trading.
+
+check_hours is in {True,False}
+"""
+
+check_hours = False
 
 LIST_SYMBOL = ["[NQ100]"]
 LIST_VOLUME = [3.0]
