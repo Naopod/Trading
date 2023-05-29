@@ -192,6 +192,38 @@ def check_allowed_trading_hours():
     else:
         return False
 
+
+## holidays for the Nasdaq or not
+
+def print_trading_hours():
+
+
+    holidays_nq100 = {
+        datetime(2023, 1, 2).date() : 'New_Years_Day',
+        datetime(2023, 1, 16).date() : 'Martin Luther King, Jr.Day',
+        datetime(2023, 2, 20).date() : 'President Day',
+        datetime(2023, 4, 7).date() : 'Good Friday',
+        datetime(2023, 5, 29).date() : 'Memorial Day',
+        datetime(2023, 6, 19).date() : 'Juneteenth',
+        datetime(2023, 7, 4).date() : 'Independence Day',
+        datetime(2023, 9, 4).date() : 'Labor Day',
+        datetime(2023, 11, 23).date() : 'Thanksgiving Day',
+        datetime(2023, 11, 24).date() : 'Early Close',
+        datetime(2023, 12, 25).date() : 'Christmas Day'
+        
+    }
+
+    today_date = datetime.today().date()
+
+    if today_date in holidays_nq100.keys():
+        print('Todays is a US Holidays :', holidays_nq100[today_date])
+        print('\nMarket is closed')
+    else:
+        print('Market is open from:')
+        print('\nSunday 12 pm (GMT)')
+        print('\nTo:')
+        print('\nFriday 12 pm (GMT)')    
+
 ## Function to get the exposure of a symbol
 
 def get_exposure(symbol):
@@ -356,8 +388,7 @@ if __name__ == '__main__':
         print('Best value for tp_buy: ', TP_SD_BUY)
         print('Best value for sl_sell: ', SL_SD_SELL)
         print('Best value for tp_sell: ', TP_SD_SELL)
-        print(random_alea)
-        print(date)
+        print(print_trading_hours())
         print('-------\n')
 
         # update every 1 second
