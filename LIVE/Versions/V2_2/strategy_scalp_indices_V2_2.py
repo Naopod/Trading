@@ -177,7 +177,7 @@ def close_positions(order_type):
             print('order_result: ', order_result)
 
 def check_allowed_trading_hours():
-    if 15 < datetime.now().hour < 22:
+    if 14 < datetime.now().hour < 20:
         return True
     else:
         return False
@@ -338,8 +338,7 @@ if __name__ == '__main__':
         if fdi < 1.5 :
             print('Persitent trend')
         if fdi >=1.5 :
-            print('random phase')
-            print('alea: ', alea)
+            print('Random trend')
         print('signal: ', direction)
         print('Best value for sl_buy: ', SL_SD_BUY)
         print('Best value for tp_buy: ', TP_SD_BUY)
