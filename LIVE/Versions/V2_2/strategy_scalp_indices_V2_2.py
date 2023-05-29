@@ -26,6 +26,16 @@ auto = 1
 directory = "C:\Documents\Finance"
 file = "\connector.txt"
 
+## Choose whether to check hours
+"""
+If check_hours has value True then it will enable the function 'check_allowed_trading_hours()'.
+Otherwise, it will activate auto trading.
+
+check_hours is in {True,False}
+"""
+
+check_hours = False
+
 ## Get Moving Averages, RSI, Close and SD
 
 def get_close_sd(SYMBOL, TIMEFRAME, RSI_PERIOD):
@@ -261,7 +271,7 @@ if __name__ == '__main__':
                 direction = 'buy'
                 close_positions('sell')
                 
-                if num_positions == 0: #and check_allowed_trading_hours()
+                if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
                         tick = mt5.symbol_info(SYMBOL)
                         order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
                         print(order_result)
@@ -272,7 +282,7 @@ if __name__ == '__main__':
                     direction = 'buy'
                     close_positions('sell')
 
-                    if num_positions == 0: #and check_allowed_trading_hours()
+                    if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
                         tick = mt5.symbol_info(SYMBOL)
                         order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
                         print(order_result)
@@ -284,7 +294,7 @@ if __name__ == '__main__':
                 close_positions('buy')
                 direction = 'sell'
                 
-                if num_positions == 0: #and check_allowed_trading_hours()
+                if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
                     tick = mt5.symbol_info(SYMBOL)
                     order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
                     print(order_result)
@@ -295,7 +305,7 @@ if __name__ == '__main__':
                     direction = 'sell'
                     close_positions('buy')
                 
-                    if num_positions == 0: #and check_allowed_trading_hours()
+                    if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
                         tick = mt5.symbol_info(SYMBOL)
                         order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
                         print(order_result)
@@ -306,7 +316,7 @@ if __name__ == '__main__':
 
         deal_history = mt5.history_deals_get(datetime(today_date.year, today_date.month, today_date.day), datetime.now())
 
-        if len(deal_history) in range(5, 100, 5):
+        if len(deal_history) == 2000 : #in range(5, 100, 5):
 
             ## Optimize over the past 50 ticks
 
