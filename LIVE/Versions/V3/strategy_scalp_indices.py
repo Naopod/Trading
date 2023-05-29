@@ -12,19 +12,7 @@ from statistics import mode
 from opt_function_V3 import optimize
 from math import sqrt
 
-## Choose the method for connection to MT5
-"""
-If auto has value 1 then it automatically connect you to the last used account.
-Otherwise, it extracts the data contained in a file .txt located in <directory> with the following format :
-    <login>;<password>;<server>
-    
-directory = "<name of the directory from the root to the the file>"
-file = "\<name of file>.txt"
-"""
-
-auto = 1
-directory = "C:\Documents\Finance"
-file = "\connector.txt"
+## Function to connect to a choosen account or last logged
 
 def connect_to_account(auto, directory, file) :
     
@@ -47,16 +35,6 @@ def connect_to_account(auto, directory, file) :
         print('Connected to MetaTrader5')
         print('Login: ', login)
         print('Server: ', server)
-
-## Choose whether to check hours
-"""
-If check_hours has value True then it will enable the function 'check_allowed_trading_hours()'.
-Otherwise, it will activate auto trading.
-
-check_hours is in {True,False}
-"""
-
-check_hours = False
 
 ## Get Moving Averages, RSI, Close and SD
 
@@ -253,7 +231,7 @@ def give_order_alea(num_positions, check_hours, SYMBOL, VOLUME, direction, sd, S
             
 ## Run strategy 
     
-def execute_strategy(symbol, volume, timeframe, long_ma_period, rsi_period, auto, directory, file):
+def execute_strategy(symbol, volume, timeframe, long_ma_period, rsi_period, auto, directory, file, check_hours):
     
     # strategy parameters
     SYMBOL = symbol
