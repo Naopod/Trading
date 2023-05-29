@@ -251,7 +251,8 @@ if __name__ == '__main__':
         ma_21, ma_50, ma_100 = get_ma(SYMBOL, TIMEFRAME, LONG_MA_PERIOD)
         rsi_14, ma_rsi_14 = get_rsi(SYMBOL, TIMEFRAME, LONG_MA_PERIOD)
         close, sd = get_close_sd(SYMBOL, TIMEFRAME, RSI_PERIOD)
-        fdi = get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD)
+        fdi = 1.505#get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD)
+        alea = 0
 
         direction = 'flat'
 
@@ -288,7 +289,7 @@ if __name__ == '__main__':
                     order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
                     print(order_result)
             
-            elif rsi_14 > ma_rsi_14 and fdi >= 1.5 :
+            elif rsi_14 < ma_rsi_14 and fdi >= 1.5 :
                 alea = rd.random()
                 if alea > 0.5 :
                     direction = 'sell'
@@ -339,6 +340,7 @@ if __name__ == '__main__':
             print('Persitent trend')
         if fdi >=1.5 :
             print('Random trend')
+            print('alea : ', alea)
         print('signal: ', direction)
         print('Best value for sl_buy: ', SL_SD_BUY)
         print('Best value for tp_buy: ', TP_SD_BUY)
