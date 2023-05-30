@@ -1,5 +1,11 @@
 Remaining tasks to do :
 
+0 - Updates on Samantha
+  0.1 - Not fast enough : takes decisions every 5 minutes, while the market can change drastically within 1 minute
+  0.2 - When launching it : forbid it to take any position before the signal is flat, then take decisions
+  0.3 - If past order was lost (it if reached the stop loss) : forbid it to take another order right after (within 5 minute) in the same direction
+  0.4 - Make it learn of its past errors
+
 1 - ML model for news analysis
   1.1 - Make model (done)
   1.2 - Get access to Bloomberg terminal 
