@@ -56,7 +56,7 @@ def process_input():
             break
 
         # Exécutez la fonction sur l'input
-        result = function(input)
+        result = ssi.execute_strategy(symbol, volume, timeframe, long_ma_period, rsi_period, auto, directory, file) #function(input)
 
         # Placez le résultat dans la file d'attente
         results_queue.put(result)
@@ -65,7 +65,7 @@ def process_input():
 # Créez des threads pour chaque input
 threads = []
 for _ in inputs:
-    thread = threading.Thread(target=process_input)
+    thread = thd.Thread(target=process_input)
     threads.append(thread)
     thread.start()
 
@@ -91,7 +91,7 @@ while True:
     # Réexécutez les threads avec les nouveaux inputs
     threads = []
     for _ in inputs:
-        thread = threading.Thread(target=process_input)
+        thread = thd.Thread(target=process_input)
         threads.append(thread)
         thread.start()
 
@@ -120,6 +120,8 @@ if __name__ == '__main__':
     else :
         for i in range(n) :
             ssi.execute_strategy(symbol, volume, timeframe, long_ma_period, rsi_period, auto, directory, file)
+            
 if not __name__ == '__main__': ## Close all positions when closing it
+    
     close_positions('all')
 
