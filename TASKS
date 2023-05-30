@@ -24,3 +24,7 @@ Remaining tasks to do :
 5 - Ability to trade on multi-market
   5.1 - Determine interesting markets
   5.2 - Implement multi-choice market and multi-bet
+
+6 - Calculate deflator
+  6.1 - Implement deflator formula
+  6.2 - Forbid/Restrict use of robot on market for high values of Deflator
