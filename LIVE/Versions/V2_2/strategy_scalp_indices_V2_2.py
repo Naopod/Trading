@@ -215,15 +215,21 @@ def print_trading_hours():
     }
 
     today_date = datetime.today().date()
+    day_of_week = today_date.weekday()
 
     if today_date in holidays_nq100.keys():
         print('Todays is a US Holidays :', holidays_nq100[today_date])
         print('\nMarket is closed')
+        if (day_of_week == 5) or (day_of_week == 6):
+            print('\nMarket will reopen on Sunday 12 PM')
+        else:
+            print('\nMarket will open at 12 PM')
+
     else:
-        print('Market is open from:')
-        print('\nSunday 12 pm (GMT)')
-        print('\nTo:')
-        print('\nFriday 12 pm (GMT)')    
+        if (day_of_week == 5) or (day_of_week == 6):
+            print('\nMarket will reopen on Sunday 12 PM')
+        else:
+            print('\nMarket is opened until Friday 12 PM')   
 
 ## Function to get the exposure of a symbol
 
@@ -425,4 +431,3 @@ if __name__ == '__main__':
 
 if not __name__ == '__main__': ## Close all positions when closing it
     close_positions('all')
-
