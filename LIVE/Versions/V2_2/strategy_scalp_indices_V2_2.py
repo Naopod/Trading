@@ -5,8 +5,7 @@ import pandas as pd
 import numpy as np
 import time
 import random as rd
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from time import sleep
 from itertools import product
 from statistics import mode
