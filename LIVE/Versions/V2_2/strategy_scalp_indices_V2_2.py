@@ -312,72 +312,36 @@ if __name__ == '__main__':
         rsi_14, ma_rsi_14 = get_rsi(SYMBOL, TIMEFRAME, LONG_MA_PERIOD)
         close, sd = get_close_sd(SYMBOL, TIMEFRAME, RSI_PERIOD)
         fdi = get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD)
-        alea = 0
-
+        
         direction = 'flat'
 
-        if close > ma_21 and close > ma_50 and close > ma_100:
-            if rsi_14 > ma_rsi_14 and fdi < 1.5:
-                past_profit, past_direction = get_past_profit_direction()
+        if close > ma_21 and close > ma_50 and close > ma_100 and rsi_14 > ma_rsi_14 and fdi < 1.5 :
+            past_profit, past_direction = get_past_profit_direction()
 
-                if (past_profit < 0) and (past_direction == 1.0):
-                    direction = 'flat'
-                else:
-                    direction = 'buy'
-                    close_positions('sell')
+            if (past_profit < 0) and (past_direction == 1.0):
+                direction = 'flat'
+            else:
+                direction = 'buy'
+                close_positions('sell')
                     
-                    if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
-                            tick = mt5.symbol_info(SYMBOL)
-                            order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
-                            print(order_result)
-                        
-            elif rsi_14 > ma_rsi_14 and fdi >= 1.5 :
+                if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
+                    tick = mt5.symbol_info(SYMBOL)
+                    order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
+                    print(order_result)
 
-                if (past_profit < 0) and (past_direction == 1.0):
+        elif close < ma_21 and close < ma_50 and close < ma_100 and rsi_14 < ma_rsi_14 and fdi < 1.5 :
+            past_profit, past_direction = get_past_profit_direction()
+
+            if (past_profit < 0) and (past_direction == 0.0):
                     direction = 'flat'
-                else:
-                    alea = rd.random()
-                    if alea > 0.5 :
-                        direction = 'buy'
-                        close_positions('sell')
-
-                        if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
-                            tick = mt5.symbol_info(SYMBOL)
-                            order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
-                            print(order_result)
-                            random_alea = random_alea.append(alea)
-                            date = date.append(datetime.now())
-
-        elif close < ma_21 and close < ma_50 and close < ma_100:
-            if rsi_14 < ma_rsi_14 and fdi < 1.5:
-
-                if (past_profit < 0) and (past_direction == 0.0):
-                    direction = 'flat'
-                else:
-                    close_positions('buy')
-                    direction = 'sell'
+            else:
+                close_positions('buy')
+                direction = 'sell'
                     
-                    if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
-                        tick = mt5.symbol_info(SYMBOL)
-                        order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
-                        print(order_result)
-            
-            elif rsi_14 < ma_rsi_14 and fdi >= 1.5 :
-
-                if (past_profit < 0) and (past_direction == 0.0):
-                    direction = 'flat'
-                else:
-                    alea = rd.random()
-                    if alea > 0.5 :
-                        direction = 'sell'
-                        close_positions('buy')
-                    
-                        if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
-                            tick = mt5.symbol_info(SYMBOL)
-                            order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
-                            print(order_result)
-                            random_alea = random_alea.append(alea)
-                            date = date.append(datetime.now())
+                if (num_positions == 0 and check_hours + check_allowed_trading_hours() == 2) or (num_positions == 0 and not check_hours) :
+                    tick = mt5.symbol_info(SYMBOL)
+                    order_result = market_order(SYMBOL, VOLUME, 'sell', tick.bid + SL_SD_SELL * sd, tick.bid - TP_SD_SELL * sd)
+                    print(order_result)
 
         today_date = datetime.today()
 
@@ -417,7 +381,6 @@ if __name__ == '__main__':
             print('Persitent trend')
         if fdi >=1.5 :
             print('Random trend')
-            print('alea : ', alea)
         print('signal: ', direction)
         print('Best value for sl_buy: ', SL_SD_BUY)
         print('Best value for tp_buy: ', TP_SD_BUY)
