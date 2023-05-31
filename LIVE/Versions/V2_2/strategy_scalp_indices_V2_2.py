@@ -314,7 +314,7 @@ if __name__ == '__main__':
         
         direction = 'flat'
 
-        if close > ma_21 and close > ma_50 and close > ma_100 and rsi_14 > ma_rsi_14 and fdi < 1.5 :
+        if close > ma_21 and close > ma_50 and close > ma_100 and rsi_14 > ma_rsi_14 and fdi < 1.485 :
             past_profit, past_direction = get_past_profit_direction()
 
             if (past_profit < 0) and (past_direction == 1.0):
@@ -328,7 +328,7 @@ if __name__ == '__main__':
                     order_result = market_order(SYMBOL, VOLUME, 'buy', tick.bid - SL_SD_BUY * sd, tick.bid + TP_SD_BUY * sd)
                     print(order_result)
 
-        elif close < ma_21 and close < ma_50 and close < ma_100 and rsi_14 < ma_rsi_14 and fdi < 1.5 :
+        elif close < ma_21 and close < ma_50 and close < ma_100 and rsi_14 < ma_rsi_14 and fdi < 1.485 :
             past_profit, past_direction = get_past_profit_direction()
 
             if (past_profit < 0) and (past_direction == 0.0):
