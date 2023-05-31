@@ -34,3 +34,11 @@ Remaining tasks to do :
 6 - Calculate deflator
   6.1 - Implement deflator formula
   6.2 - Forbid/Restrict use of robot on market for high values of Deflator
+
+7 - ML model for best timing on decisions
+  7.1 - Finish formation on ML (especially on time series prediction)
+  7.2 - Design model
+  7.3 - Implement model : make it learn, using indicators and past prices, the best moment to open and close positions
+  
+  
+  
