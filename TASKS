@@ -45,5 +45,8 @@ Remaining tasks to do :
   8.2 - Design model
   8.3 - Implement model : make it choose perfectly the stop loss and take profit rule on each trade, according to the the behaviour of the market
   
+9 - Backtesting.py
+  9.1 - Reach 70 % - 75 % minimum wins rate : design a great strategy, very precise 
+  
   
   
