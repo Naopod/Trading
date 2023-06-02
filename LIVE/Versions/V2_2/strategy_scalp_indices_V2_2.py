@@ -243,13 +243,20 @@ def get_exposure(symbol):
 ## Get past profit and direction
 
 def get_past_profit_direction():
-    past_profit = mt5.history_deals_get(datetime.today() - timedelta(days=1), datetime.today() + timedelta(days=1))[-1].profit
-    past_direction = mt5.history_deals_get(datetime.today() - timedelta(days=1), datetime.today() + timedelta(days=1))[-1].type
-
-    if past_profit == 0.0:
-        past_profit = mt5.history_deals_get(datetime.today() - timedelta(days=1), datetime.today() + timedelta(days=1))[-2].profit
-        past_direction = mt5.history_deals_get(datetime.today() - timedelta(days=1), datetime.today() + timedelta(days=1))[-2].type
+    hist_deals = mt5.history_deals_get(datetime.today() - timedelta(days=1), datetime.today() + timedelta(days=1))
+    n = len(hist_deals)
     
+    if n > 0 :
+        
+        past_profit = hist_deals[-1].profit
+        past_direction = hist_deals[-1].type
+
+        if past_profit == 0.0 and n > 1:
+            past_profit = hist_deals[-2].profit
+            past_direction = hist_deals[-2].type
+    else :
+        past_profit = -1
+        past_direction = -1.0
 
     return past_profit, past_direction
 
@@ -311,6 +318,7 @@ if __name__ == '__main__':
         rsi_14, ma_rsi_14 = get_rsi(SYMBOL, TIMEFRAME, LONG_MA_PERIOD)
         close, sd = get_close_sd(SYMBOL, TIMEFRAME, RSI_PERIOD)
         fdi = get_fdi(SYMBOL, TIMEFRAME, RSI_PERIOD)
+        past_profit = 0
         
         direction = 'flat'
 
