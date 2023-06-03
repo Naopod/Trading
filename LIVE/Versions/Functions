@@ -1,0 +1,289 @@
+import pandas as pd
+import pandas_ta as ta
+
+def CLOSE(df):
+
+    close = df.close.iloc[-1]
+    return close
+
+################################################################## Indicators ########################################################################
+
+## MA
+
+def MA(df, n):
+
+    '''n : rolling window'''
+
+    ma = ta.ma('sma', df.close, length=n)
+    return ma
+
+## MACD
+
+def MACD(df):
+
+    exp1 = df.close.ewm(span=12).mean()
+    exp2 = df.close.ewm(span=26).mean()
+    macd = exp1 - exp2
+    signal = macd.ewm(span=9).mean()
+
+    return macd, signal
+
+## Relative Strength Index
+
+def RSI(df):
+
+    rsi = ta.rsi(df.close, length=16)
+    return rsi
+
+## VWAP
+
+def VWAP(df):
+
+    vwap = ta.vwap(df.high, df.low, df.close, df.real_volume)
+    return vwap
+
+## EMA
+
+def EMA(df):
+
+    ema = ta.ema(df.close, length=100)
+    return ema
+
+## ATR
+
+def ATR(df):
+    atr = ta.atr(df.high, df.low, df.close, length=14)
+    return atr
+
+## BBANDS
+
+def BBANDS(df):
+    bbands = ta.bbands(df.close, length=14, stf=2.0)
+    return bbands
+
+## FDI
+
+def FDI(SYMBOL, TIMEFRAME, RSI_PERIOD):
+    df = pd.DataFrame(mt5.copy_rates_from_pos(SYMBOL, TIMEFRAME, 1, RSI_PERIOD))
+    close = df['close']
+    highest = np.max(df['high'])
+    lowest = np.min(df['low'])
+    length = 0
+    pdiff = 0
+    
+    for period in range(RSI_PERIOD) :
+        if (highest-lowest)>0:
+            diff = (close[period] - lowest)/(highest - lowest)
+            if period > 0 :
+                length += sqrt((diff - pdiff) ** 2 + 1/(RSI_PERIOD ** 2))
+            pdiff = diff
+    
+    if length > 0 :
+        fdi = 1 + np.log(2*length)/np.log(2*RSI_PERIOD)
+    else :
+        fdi = 0
+        
+    return fdi
+
+## Support 
+
+def support(df1, l, n1, n2):
+
+    wick_threshold = 0.0001
+    if (df1.low[l-n1:l].min() < df1.low[l] or
+        df1.low[l+1:l+n2+1].min() < df1.low[l]):
+        return 0
+    candle_body = abs(df1.open[l]-df1.close[l])
+    lower_wick = min(df1.open[l], df1.close[l])-df1.low[l]
+    if (lower_wick > candle_body) and (lower_wick > wick_threshold):
+        return 1
+    
+    return 0
+
+## Resistance
+
+def resistance(df1, l, n1, n2):
+
+    wick_threshold = 0.0001
+    if (df1.high[l-n1:l].max() > df1.high[l] or
+        df1.high[l+1:l+n2+1].max() > df1.high[l]):
+        return 0
+    
+    candle_body = abs(df1.open[l]-df1.close[l])
+    upper_wick = df1.high[l]-max(df1.open[l], df1.close[l])
+    if (upper_wick > candle_body) and (upper_wick > wick_threshold):
+        return 1
+    
+    return 0
+
+## Close to Resistance
+
+def closeResistance(l,levels,lim, df):
+
+    if len(levels)==0:
+        return 0
+    c1 = abs(df.high[l]-min(levels, key=lambda x:abs(x-df.high[l])))<=lim
+    c2 = abs(max(df.open[l],df.close[l])-min(levels, key=lambda x:abs(x-df.high[l])))<=lim
+    c3 = min(df.open[l],df.close[l])<min(levels, key=lambda x:abs(x-df.high[l]))
+    c4 = df.low[l]<min(levels, key=lambda x:abs(x-df.high[l]))
+    if( (c1 or c2) and c3 and c4 ):
+        return min(levels, key=lambda x:abs(x-df.high[l]))
+    else:
+        return 0
+    
+## Close to Support
+    
+def closeSupport(l,levels,lim, df):
+
+    if len(levels)==0:
+        return 0
+    c1 = abs(df.low[l]-min(levels, key=lambda x:abs(x-df.low[l])))<=lim
+    c2 = abs(min(df.open[l],df.close[l])-min(levels, key=lambda x:abs(x-df.low[l])))<=lim
+    c3 = max(df.open[l],df.close[l])>min(levels, key=lambda x:abs(x-df.low[l]))
+    c4 = df.high[l]>min(levels, key=lambda x:abs(x-df.low[l]))
+    if( (c1 or c2) and c3 and c4 ):
+        return min(levels, key=lambda x:abs(x-df.low[l]))
+    else:
+        return 0
+    
+## Check if previous candles are below Resistance
+
+def is_below_resistance(l, level_backCandles, level, df):
+
+    return df.loc[l-level_backCandles:l-1, 'high'].max() < level
+
+## Check if previous candles are below Support
+
+def is_above_support(l, level_backCandles, level, df):
+
+    return df.loc[l-level_backCandles:l-1, 'low'].min() > level 
+
+################################################################# Candles Patterns ###############################################################
+
+## Engulfing candle pattern
+
+def isEngulfing(l):
+
+    '''Params for EURUSD'''
+    mybodydiff = 0.000001
+    mybodydiffmin = 0.002
+
+
+    length = len(df)
+    high = list(df['high'])
+    low = list(df['low'])
+    close = list(df['close'])
+    open = list(df['open'])
+    bodydiff = [0] * length
+
+    highdiff = [0] * length
+    lowdiff = [0] * length
+    ratio1 = [0] * length
+    ratio2 = [0] * length
+
+
+    row=l
+    bodydiff[row] = abs(open[row]-close[row])
+    if bodydiff[row]<mybodydiff:
+        bodydiff[row]=mybodydiff      
+
+    bodydiffmin = mybodydiffmin
+    if (bodydiff[row]>bodydiffmin and bodydiff[row-1]>bodydiffmin and
+        open[row-1]<close[row-1] and
+        open[row]>close[row] and 
+        (open[row]-close[row-1])>=-0e-5 and close[row]<open[row-1]): #+0e-5 -5e-5
+        return 1
+
+    elif(bodydiff[row]>bodydiffmin and bodydiff[row-1]>bodydiffmin and
+        open[row-1]>close[row-1] and
+        open[row]<close[row] and 
+        (open[row]-close[row-1])<=+0e-5 and close[row]>open[row-1]):#-0e-5 +5e-5
+        return 2
+    else:
+        return 0
+    
+## Start candle pattern
+
+def isStar(l):
+
+    '''Params for EURUSD'''
+    mybodydiff = 0.000001
+    mybodydiffmin = 0.002
+
+    length = len(df)
+    high = list(df['high'])
+    low = list(df['low'])
+    close = list(df['close'])
+    open = list(df['open'])
+    bodydiff = [0] * length
+
+    highdiff = [0] * length
+    lowdiff = [0] * length
+    ratio1 = [0] * length
+    ratio2 = [0] * length
+
+    bodydiffmin = mybodydiffmin
+    row=l
+    highdiff[row] = high[row]-max(open[row],close[row])
+    lowdiff[row] = min(open[row],close[row])-low[row]
+    bodydiff[row] = abs(open[row]-close[row])
+    if bodydiff[row]<mybodydiff:
+        bodydiff[row]=mybodydiff
+    ratio1[row] = highdiff[row]/bodydiff[row]
+    ratio2[row] = lowdiff[row]/bodydiff[row]
+
+    if (ratio1[row]>1 and lowdiff[row]<0.2*highdiff[row] and bodydiff[row]>bodydiffmin):# and open[row]>close[row]):
+        return 1
+    elif (ratio2[row]>1 and highdiff[row]<0.2*lowdiff[row] and bodydiff[row]>bodydiffmin):# and open[row]<close[row]):
+        return 2
+    else:
+        return 0
+    
+## Bollinger Doji
+
+def bollinger_doji_signal(df): 
+    #bullish signal
+    if ( df.close.iloc[-1] < df['BBL_30_1.5'].iloc[-1] and
+       #df.Close.iloc[-1] > df['BBL_30_1.5'].iloc[-1] and df.Close.iloc[-1] < df['BBM_30_1.5'].iloc[-1] and
+       df.close.iloc[-1] > df.open.iloc[-1] and
+       df.close.iloc[-2] == df.open.iloc[-2] and
+       df.close.iloc[-3] < df.open.iloc[-3] ):
+        return 2
+    
+    #bearish signal
+    elif ( df.close.iloc[-1] > df['BBU_30_1.5'].iloc[-1] and
+        #df.Close.iloc[-1] < df['BBU_30_1.5'].iloc[-1] and df.Close.iloc[-1] > df['BBM_30_1.5'].iloc[-1] and
+       df.close.iloc[-1] < df.open.iloc[-1] and
+       df.close.iloc[-2] == df.open.iloc[-2] and
+       df.close.iloc[-3] > df.open.iloc[-3] ):
+         return 1
+    
+    #nosignal
+    else:
+        return 0
+
+## Bollinger Engulfing
+
+def bollinger_engulfing_signal(df): 
+    #bullish signal
+    if ( df.close.iloc[-1] < df['BBL_30_1.5'].iloc[-1] and
+        #df.Close.iloc[-1] > df['BBL_30_1.5'].iloc[-1] and df.Close.iloc[-1] < df['BBM_30_1.5'].iloc[-1] and
+       df.close.iloc[-1] > df.open.iloc[-1] and
+       df.close.iloc[-2] < df.open.iloc[-2] and
+       df.open.iloc[-1] < df.close.iloc[-2] and
+       df.close.iloc[-1] > df.open.iloc[-2] ):
+        return 2
+    
+    #bearish signal
+    elif ( df.close.iloc[-1] > df['BBU_30_1.5'].iloc[-1] and
+        #df.Close.iloc[-1] < df['BBU_30_1.5'].iloc[-1] and df.Close.iloc[-1] > df['BBM_30_1.5'].iloc[-1] and
+       df.close.iloc[-1] < df.open.iloc[-1] and
+       df.close.iloc[-2] > df.open.iloc[-2] and
+       df.open.iloc[-1] > df.olose.iloc[-2] and
+       df.close.iloc[-1] < df.open.iloc[-2] ):
+         return 1
+    
+    #nosignal
+    else:
+        return 0
+    
