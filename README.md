@@ -1,5 +1,5 @@
 # Trading-Repository
 
-Chaos
+George Soros is mad because of this repository !
 
 
